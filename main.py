@@ -79,11 +79,14 @@ def control(proxy, proxy_type, username):
     phone = get_random_phone_number('numbers.txt')
     message = get_random_message('message.txt', username)
 
-    # Prepare form data
-    data = {input['name']: input.get('value', '') for input in form.find_all(['input', 'textarea'])}
-    data['support_email'] = email
-    data['support_phone'] = phone
-    data['support_problem'] = message
+    # Prepare form data to match the new field names
+    data = {
+        'support_problem': message,  # message text
+        'legal_name': 'Anonymous',   # a placeholder full legal name (you can customize this)
+        'email': email,              # email from file
+        'phone': phone,              # phone from file
+        'setln': '',                 # empty value for language or additional field
+    }
 
     headers = {'User-Agent': USER_AGENT}
 
@@ -117,7 +120,7 @@ def start_view():
                     thread.start()
             except FileNotFoundError:
                 print(f"⚠️ {proxy_type}_proxies.txt not found, skipping...")
-        
+
         for t in threads:
             t.join()
 
